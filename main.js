@@ -1,7 +1,8 @@
-import App from './App'
+import App from './App';
 
 // #ifndef VUE3
 import Vue from 'vue'
+window.wx = {}
 Vue.config.productionTip = false
 App.mpType = 'app'
 const app = new Vue({
