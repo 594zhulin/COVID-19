@@ -73,8 +73,8 @@
         "title" : "智慧防疫",
         "template" : "index.html",
         "router" : {
-            "mode" : "hash",
-            "base" : "./"
+            "mode" : "history",
+            "base" : "/h5/"
         },
         "devServer" : {
             "https" : false
