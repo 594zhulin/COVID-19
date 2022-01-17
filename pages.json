@@ -15,7 +15,7 @@
 		{
 			"path": "pages/auth/auth",
 			"style": {
-				"navigationBarTitleText": "场所认证"
+				"navigationBarTitleText": "添加场所"
 			}
 		}
 	],

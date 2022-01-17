@@ -284,7 +284,7 @@ export default {
 			width: 24px;
 			height: 24px;
 			margin-right: -5px;
-			background: url(../../static/arrow.png) no-repeat center;
+			background: url(../../assets/arrow.png) no-repeat center;
 			background-size: contain;
 		}
 	}

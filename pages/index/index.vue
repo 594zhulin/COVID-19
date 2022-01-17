@@ -55,7 +55,7 @@
 					<view class="count">{{ scanRate }}%</view>
 				</view>
 			</view>
-			<view class="bar-chart" id="myChart"></view>
+			<view class="bar-chart" :class="monthData.length === 0 ? 'no-after' : 'bar-chart'" id="myChart"></view>
 		</view>
 		<view class="region">
 			<view class="title">智慧防控布点</view>
@@ -110,7 +110,6 @@ export default {
 		};
 	},
 	onLoad(option) {
-		console.log(echarts);
 		this.code = option.code || '1001';
 		this.getHomeData();
 	},
@@ -145,7 +144,6 @@ export default {
 							title: ErrMsg
 						});
 					}
-					console.log(res.data);
 				},
 				fail: err => {
 					uni.showToast({
@@ -162,7 +160,7 @@ export default {
 			height: 100px;
 			padding: 2px 8px 0 8px;
 			box-sizing: border-box;
-			background: url(../../static/tooltip.png) no-repeat center;
+			background: url(./static/tooltip.png) no-repeat center;
 			background-size: contain;
 			font: 10px PingFang SC;
 			line-height: 14px;
@@ -198,13 +196,15 @@ export default {
 					axisPointer: {
 						type: 'shadow'
 					},
-					position:function(point){
-						return [point[0]-28,point[1]-50]
+					position: function(point) {
+						return [point[0] - 28, point[1] - 50];
 					},
 					formatter: function(params) {
 						var res = '';
 						for (let i = 0, length = params.length; i < length; i++) {
-							res += `<div style="${tooltipLabelStyle}${params[i].data.text==='扫码人数'?'color:#1ACB97':'color:#546DFA'}">${params[i].data.text}</div><div style="${tooltipCountStyle}">${params[i].data.value}</div>`;
+							res += `<div style="${tooltipLabelStyle}${params[i].data.text === '扫码人数' ? 'color:#1ACB97' : 'color:#546DFA'}">${
+								params[i].data.text
+							}</div><div style="${tooltipCountStyle}">${params[i].data.value}</div>`;
 						}
 						res += `<div style="${tooltipLabelStyle}color:#555550">扫码率</div><div style="${tooltipCountStyle}">${(
 							(params[1].data.value / params[0].data.value) *
@@ -329,7 +329,7 @@ export default {
 		left: 0;
 		right: 0;
 		height: 240px;
-		background: url(../../static/banner.png) no-repeat center top;
+		background: url(../../assets/banner.png) no-repeat center top;
 		background-size: cover;
 		z-index: -1;
 	}
@@ -375,7 +375,7 @@ export default {
 		.title {
 			flex: 1;
 			height: 89px;
-			background: url(../../static/title.png) no-repeat center;
+			background: url(../../assets/title.png) no-repeat center;
 			background-position: -6px -6px;
 		}
 	}
@@ -535,6 +535,9 @@ export default {
 				height: 1px;
 				background-color: #c4c4c4;
 			}
+		}
+		.bar-chart.no-after::after {
+			display: none;
 		}
 	}
 	.region {

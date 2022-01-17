@@ -5,16 +5,16 @@ export default {
 		uni.addInterceptor('request', {
 			invoke(args) {
 				// request 触发前拼接 url
-				args.url = 'http://175.24.114.188:801/front' + args.url;
+				args.url = 'http://sapi.yulongtianzi.com/front' + args.url;
 			},
 			success(args) {
-				console.log('interceptor-success', args);
+				// console.log('interceptor-success', args);
 			},
 			fail(err) {
-				console.log('interceptor-fail', err);
+				// console.log('interceptor-fail', err);
 			},
 			complete(res) {
-				console.log('interceptor-complete', res);
+				// console.log('interceptor-complete', res);
 			}
 		});
 	},

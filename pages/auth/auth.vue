@@ -2,7 +2,7 @@
 	<view class="auth-form">
 		<view class="auth-form-item">
 			<view class="auth-form-label">场所认证</view>
-			<view class="auth-form-content"><input class="auth-form-input" type="text" v-model="regionName" placeholder="请输入场所名称" disabled /></view>
+			<view class="auth-form-content"><input class="auth-form-input" type="text" v-model="regionName" placeholder="请输入场所名称" /></view>
 		</view>
 		<view class="auth-form-item">
 			<view class="auth-form-label">省市区</view>
@@ -75,7 +75,7 @@ export default {
 
 			// 认证请求需要的参数
 			parentCode: '',
-			regionName: '将军碑社区',
+			regionName: '',
 			countryCode: '',
 			regionType: 0,
 			directorName: '',
@@ -188,6 +188,13 @@ export default {
 			});
 		},
 		validate() {
+			if (this.regionName === '') {
+				uni.showToast({
+					icon: 'none',
+					title: '请输入场所名称'
+				});
+				return false;
+			}
 			if (this.regionText === '') {
 				uni.showToast({
 					icon: 'none',
@@ -317,7 +324,7 @@ export default {
 			width: 24px;
 			height: 24px;
 			margin-right: -5px;
-			background: url(../../static/arrow.png) no-repeat center;
+			background: url(../../assets/arrow.png) no-repeat center;
 			background-size: contain;
 		}
 	}
