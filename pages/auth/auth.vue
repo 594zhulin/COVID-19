@@ -1,34 +1,36 @@
 <template>
-	<view class="auth-form">
-		<view class="auth-form-item">
-			<view class="auth-form-label">场所认证</view>
-			<view class="auth-form-content"><input class="auth-form-input" type="text" v-model="regionName" placeholder="请输入场所名称" /></view>
-		</view>
-		<view class="auth-form-item">
-			<view class="auth-form-label">场所类型</view>
-			<view class="auth-form-content select">
-				<picker mode="selector" :range="regionTypes" range-key="text" @change="getRegionType">
-					<input class="auth-form-input" v-model="regionTypeText" placeholder="请选择类型" disabled />
-				</picker>
+	<view class="page-auth">
+		<view class="auth-form">
+			<view class="auth-form-item">
+				<view class="auth-form-label">场所认证</view>
+				<view class="auth-form-content"><input class="auth-form-input" type="text" v-model="regionName" placeholder="请输入场所名称" /></view>
 			</view>
-		</view>
-		<view class="auth-form-item">
-			<view class="auth-form-label">场所负责人</view>
-			<view class="auth-form-content"><input class="auth-form-input" type="text" v-model="directorName" placeholder="请输入场所负责人姓名" /></view>
-		</view>
-		<view class="auth-form-item">
-			<view class="auth-form-label">手机号</view>
-			<view class="auth-form-content"><input class="auth-form-input" type="text" v-model="directorPhone" placeholder="请输入场所负责人手机号" /></view>
-		</view>
-		<view class="auth-form-item">
-			<view class="auth-form-label">验证码</view>
-			<view class="auth-form-content">
-				<input class="auth-form-input" type="text" v-model="verifyCode" placeholder="请输入验证码" />
-				<view class="auth-form-text" v-show="countDown === 60" @click="getVerifyCode">获取验证码</view>
-				<view class="auth-form-text" v-show="countDown !== 60">{{ countDown }}s</view>
+			<view class="auth-form-item">
+				<view class="auth-form-label">场所类型</view>
+				<view class="auth-form-content">
+					<picker class="auth-form-picker" mode="selector" :range="regionTypes" range-key="text" @change="getRegionType">
+						<input class="auth-form-input" v-model="regionTypeText" placeholder="请选择类型" disabled />
+					</picker>
+				</view>
 			</view>
+			<view class="auth-form-item">
+				<view class="auth-form-label">场所负责人</view>
+				<view class="auth-form-content"><input class="auth-form-input" type="text" v-model="directorName" placeholder="请输入场所负责人姓名" /></view>
+			</view>
+			<view class="auth-form-item">
+				<view class="auth-form-label">手机号</view>
+				<view class="auth-form-content"><input class="auth-form-input" type="text" v-model="directorPhone" placeholder="请输入场所负责人手机号" /></view>
+			</view>
+			<view class="auth-form-item">
+				<view class="auth-form-label">验证码</view>
+				<view class="auth-form-content flex">
+					<input class="auth-form-input" type="text" v-model="verifyCode" placeholder="请输入验证码" />
+					<view class="auth-form-text" v-show="countDown === 60" @click="getVerifyCode">获取验证码</view>
+					<view class="auth-form-text" v-show="countDown !== 60">{{ countDown }}s</view>
+				</view>
+			</view>
+			<view class="auth-form-btn" @click="auth">认证</view>
 		</view>
-		<view class="auth-form-btn" @click="auth">认证</view>
 	</view>
 </template>
 
@@ -72,7 +74,7 @@ export default {
 		this.parentCode = option.parentCode;
 	},
 	destroyed() {
-		clearTimeout(this.timer)
+		clearTimeout(this.timer);
 	},
 	methods: {
 		getRegionType(e) {
@@ -254,9 +256,6 @@ export default {
 		line-height: 20px;
 	}
 	&-content {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
 		flex: 1;
 		padding: 11px 12px;
 		height: 44px;
@@ -264,7 +263,16 @@ export default {
 		border-radius: 4px;
 		border: 1px solid #dedede;
 	}
-	&-content.select {
+	&-content.flex {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	&-picker {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 		&::after {
 			flex-shrink: 0;
 			display: block;
@@ -276,6 +284,7 @@ export default {
 			background-size: contain;
 		}
 	}
+
 	&-input {
 		flex: 1;
 	}

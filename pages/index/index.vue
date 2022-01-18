@@ -1,9 +1,8 @@
 <template>
-	<view class="home">
+	<view class="page-home">
 		<view class="banner"></view>
 		<view class="community">
 			<view class="community-name">{{ communityName }}</view>
-			<view class="add-btn" @click="navigateTo('/pages/auth/auth')">+添加场所</view>
 		</view>
 		<view class="header">
 			<view class="title"></view>
@@ -56,7 +55,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="region">
+		<view class="region" v-if="regionData.length > 0">
 			<view class="title">智慧防控布点</view>
 			<view class="region-item" v-for="(item, index) in regionData" :key="index">
 				<view class="region-name">
@@ -121,7 +120,7 @@ export default {
 					const { Success, ResData, ErrMsg } = res.data;
 					if (Success) {
 						const { community_name, red_count, yellow_count, over_tem_count, risk_count, scan_count, all_count, month_data, region_data } = ResData;
-						this.communityName = community_name || '安宫国际社区健康的JFK健康的减肥扩大解放的疯狂酒店开房间';
+						this.communityName = community_name || '安宫国际社区';
 						this.redCount = red_count;
 						this.yellowCount = yellow_count;
 						this.overTemCount = over_tem_count;
@@ -158,18 +157,8 @@ export default {
 </script>
 
 <style lang="less">
-.home {
+.page-home {
 	padding-top: 49px;
-	&::before {
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		content: '';
-		height: 240px;
-		background: linear-gradient(180deg, #86b6f7 0%, #4e7fed 100%);
-		z-index: -1;
-	}
 	&::after {
 		position: fixed;
 		content: '';
@@ -185,13 +174,19 @@ export default {
 		top: 0;
 		left: 0;
 		right: 0;
-		height: 240px;
 		background: url(../../assets/banner.png) no-repeat center top;
-		background-size: cover;
-		z-index: -1;
+		background-size: 100% 100%;
+		height: 240px;
 	}
+
 	.community,
 	.header,
+	.overview {
+		position: relative;
+		z-index: 10;
+	}
+
+	.community,
 	.overview,
 	.chart {
 		margin: 0 16px;
@@ -200,7 +195,6 @@ export default {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		margin-bottom: 3px;
 	}
 	.community-name {
 		flex: 1;
@@ -210,6 +204,8 @@ export default {
 		font-size: 18px;
 		font-family: PingFangSC-Medium, PingFang SC;
 		font-weight: 500;
+		color: #ffffff;
+		line-height: 26px;
 		color: #ffffff;
 	}
 	.add-btn {
@@ -229,11 +225,12 @@ export default {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		margin: 36px 16px 25px 13px;
 		.title {
 			flex: 1;
-			height: 89px;
-			background: url(../../assets/title.png) no-repeat center;
-			background-position: -6px -6px;
+			height: 44px;
+			background: url(../../assets/title.png) no-repeat center left;
+			background-size: 238px 44px;
 		}
 	}
 	.overview {
