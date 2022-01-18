@@ -5,14 +5,6 @@
 			<view class="auth-form-content"><input class="auth-form-input" type="text" v-model="regionName" placeholder="请输入场所名称" /></view>
 		</view>
 		<view class="auth-form-item">
-			<view class="auth-form-label">省市区</view>
-			<view class="auth-form-content select">
-				<picker mode="multiSelector" :range="regions" :value="regionIndex" range-key="name" @columnchange="getRegionData" @change="getRegionCode">
-					<input class="auth-form-input" v-model="regionText" placeholder="请选择省市区" disabled />
-				</picker>
-			</view>
-		</view>
-		<view class="auth-form-item">
 			<view class="auth-form-label">场所类型</view>
 			<view class="auth-form-content select">
 				<picker mode="selector" :range="regionTypes" range-key="text" @change="getRegionType">
@@ -41,15 +33,9 @@
 </template>
 
 <script>
-import { provinces } from '../../utils/provinces.js';
-import { cities } from '../../utils/cities.js';
-import { areas } from '../../utils/areas.js';
 export default {
 	data() {
 		return {
-			regions: [],
-			regionIndex: [0, 0, 0],
-			regionText: '',
 			regionTypes: [
 				{
 					value: 1,
@@ -76,7 +62,6 @@ export default {
 			// 认证请求需要的参数
 			parentCode: '',
 			regionName: '',
-			countryCode: '',
 			regionType: 0,
 			directorName: '',
 			directorPhone: '',
@@ -85,40 +70,11 @@ export default {
 	},
 	onLoad(option) {
 		this.parentCode = option.parentCode;
-		this.regions[0] = provinces;
-		this.regions[1] = cities.filter(item => item.provinceCode === this.regions[0][0].code);
-		this.regions[2] = areas.filter(item => item.cityCode === this.regions[1][0].code);
 	},
 	destroyed() {
 		clearTimeout(this.timer)
 	},
 	methods: {
-		getRegionData(e) {
-			this.regionIndex[e.detail.column] = e.detail.value;
-			const column = e.detail.column;
-			switch (column) {
-				case 0:
-					this.regions[1] = cities.filter(item => item.provinceCode === this.regions[0][e.detail.value].code);
-					this.regions[2] = areas.filter(item => item.cityCode === this.regions[1][0].code);
-					this.regionIndex.splice(1, 1, 0);
-					this.regionIndex.splice(2, 1, 0);
-					break;
-				case 1:
-					this.regions[2] = areas.filter(item => item.cityCode === this.regions[1][e.detail.value].code);
-					this.regionIndex.splice(2, 1, 0);
-					break;
-				default:
-					break;
-			}
-			this.$forceUpdate();
-		},
-		getRegionCode(e) {
-			const provinceText = this.regions[0][e.detail.value[0]].name;
-			const cityText = this.regions[1][e.detail.value[1]].name;
-			const areaText = this.regions[2][e.detail.value[2]].name;
-			this.regionText = [provinceText, cityText, areaText].join('/');
-			this.countryCode = this.regions[2][e.detail.value[2]].code;
-		},
 		getRegionType(e) {
 			this.regionType = this.regionTypes[e.detail.value].value;
 			this.regionTypeText = this.regionTypes[e.detail.value].text;
@@ -195,13 +151,6 @@ export default {
 				});
 				return false;
 			}
-			if (this.regionText === '') {
-				uni.showToast({
-					icon: 'none',
-					title: '请选择省市区'
-				});
-				return false;
-			}
 			if (this.regionTypeText === '') {
 				uni.showToast({
 					icon: 'none',
@@ -246,8 +195,7 @@ export default {
 					director_name: this.directorName,
 					director_phone: this.directorPhone,
 					verify_code: this.verifyCode,
-					region_type: this.regionType,
-					country_code: this.countryCode
+					region_type: this.regionType
 				},
 				success: res => {
 					const { Success, ErrMsg } = res.data;

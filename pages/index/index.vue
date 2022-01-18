@@ -55,7 +55,6 @@
 					<view class="count">{{ scanRate }}%</view>
 				</view>
 			</view>
-			<view class="bar-chart" :class="monthData.length === 0 ? 'no-after' : 'bar-chart'" id="myChart"></view>
 		</view>
 		<view class="region">
 			<view class="title">智慧防控布点</view>
@@ -91,7 +90,6 @@
 </template>
 
 <script>
-import * as echarts from '../../utils/echarts.min.js';
 export default {
 	data() {
 		return {
@@ -103,7 +101,6 @@ export default {
 			riskCount: 0,
 			scanCount: 0,
 			allCount: 0,
-			monthData: [],
 			regionData: [],
 			checkRate: 0,
 			scanRate: 0
@@ -131,13 +128,11 @@ export default {
 						this.riskCount = risk_count;
 						this.scanCount = scan_count;
 						this.allCount = all_count;
-						this.monthData = month_data;
 						this.regionData = region_data;
 						let check_rate = ((red_count + yellow_count + over_tem_count) / risk_count) * 100;
 						let scan_rate = (scan_count / all_count) * 100;
 						this.checkRate = check_rate < 100 ? check_rate.toFixed(2) : check_rate;
 						this.scanRate = scan_rate < 100 ? scan_rate.toFixed(2) : scan_rate;
-						this.drawBar();
 					} else {
 						uni.showToast({
 							icon: 'none',
@@ -151,144 +146,6 @@ export default {
 						title: err
 					});
 				}
-			});
-		},
-		drawBar() {
-			let myChart = echarts.init(document.getElementById('myChart'));
-			const tooltipStyle = `
-			width: 56px;
-			height: 100px;
-			padding: 2px 8px 0 8px;
-			box-sizing: border-box;
-			background: url(./static/tooltip.png) no-repeat center;
-			background-size: contain;
-			font: 10px PingFang SC;
-			line-height: 14px;
-			text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);`;
-			const tooltipLabelStyle = `font-family: PingFangSC-Regular, PingFang SC;
-			margin-left: -3px;
-			font-weight: 400;
-			color: #546DFA;
-			transform:scale(0.8);
-			`;
-			const tooltipCountStyle = `font-family: PingFangSC-Medium, PingFang SC;
-			margin-bottom: 2px;
-			margin-left: -3px;
-			font-weight: 500;
-			color: #222222;
-			transform:scale(0.8);`;
-			myChart.setOption({
-				color: ['#546DFA', '#37F1BA'],
-				grid: {
-					top: 8,
-					left: 0,
-					right: 8,
-					bottom: 20,
-					containLabel: true
-				},
-				tooltip: {
-					trigger: 'axis',
-					triggerOn: 'onclick',
-					padding: 0,
-					borderWidth: 0,
-					backgroundColor: 'transparent',
-					extraCssText: 'box-shadow: none;',
-					axisPointer: {
-						type: 'shadow'
-					},
-					position: function(point) {
-						return [point[0] - 28, point[1] - 50];
-					},
-					formatter: function(params) {
-						var res = '';
-						for (let i = 0, length = params.length; i < length; i++) {
-							res += `<div style="${tooltipLabelStyle}${params[i].data.text === '扫码人数' ? 'color:#1ACB97' : 'color:#546DFA'}">${
-								params[i].data.text
-							}</div><div style="${tooltipCountStyle}">${params[i].data.value}</div>`;
-						}
-						res += `<div style="${tooltipLabelStyle}color:#555550">扫码率</div><div style="${tooltipCountStyle}">${(
-							(params[1].data.value / params[0].data.value) *
-							100
-						).toFixed(2)}%</div>`;
-						return `<div style="${tooltipStyle}">${res}</div>`;
-					}
-				},
-				xAxis: {
-					type: 'category',
-					axisTick: {
-						show: false
-					},
-					axisLine: {
-						show: false
-					},
-					axisLabel: {
-						margin: 3,
-						lineHeight: 17
-					},
-					data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
-				},
-				yAxis: {
-					position: 'right',
-					type: 'value',
-					axisLabel: {
-						margin: 4,
-						lineHeight: 17,
-						color: '#888',
-						showMinLabel: false
-					},
-					splitLine: {
-						lineStyle: {
-							color: '#CBCBCB',
-							opacity: 0.5
-						}
-					}
-				},
-				dataZoom: [
-					{
-						type: 'inside',
-						show: true,
-						start: 1,
-						end: 50
-					}
-				],
-				series: [
-					{
-						type: 'bar',
-						barWidth: 8,
-						barGap: '60%',
-						data: [
-							{ value: 18203, text: '过往人数' },
-							{ value: 23564, text: '过往人数' },
-							{ value: 16541, text: '过往人数' },
-							{ value: 10264, text: '过往人数' },
-							{ value: 35421, text: '过往人数' },
-							{ value: 16458, text: '过往人数' },
-							{ value: 18203, text: '过往人数' },
-							{ value: 23564, text: '过往人数' },
-							{ value: 16541, text: '过往人数' },
-							{ value: 10264, text: '过往人数' },
-							{ value: 35421, text: '过往人数' },
-							{ value: 16458, text: '过往人数' }
-						]
-					},
-					{
-						type: 'bar',
-						data: [
-							{ value: 1011, text: '扫码人数' },
-							{ value: 6415, text: '扫码人数' },
-							{ value: 7425, text: '扫码人数' },
-							{ value: 954, text: '扫码人数' },
-							{ value: 5874, text: '扫码人数' },
-							{ value: 8954, text: '扫码人数' },
-							{ value: 1011, text: '扫码人数' },
-							{ value: 6415, text: '扫码人数' },
-							{ value: 7425, text: '扫码人数' },
-							{ value: 954, text: '扫码人数' },
-							{ value: 5874, text: '扫码人数' },
-							{ value: 8954, text: '扫码人数' }
-						]
-					}
-				]
 			});
 		},
 		navigateTo(url) {
@@ -496,7 +353,7 @@ export default {
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-			margin: 24px 19px 24px 20px;
+			padding: 24px 19px 24px 20px;
 		}
 		.count-item {
 			&:last-child {
@@ -522,22 +379,6 @@ export default {
 				color: #222222;
 				line-height: 22px;
 			}
-		}
-		.bar-chart {
-			position: relative;
-			height: 241px;
-			&::after {
-				position: absolute;
-				content: '';
-				left: 0;
-				right: 0;
-				bottom: 40px;
-				height: 1px;
-				background-color: #c4c4c4;
-			}
-		}
-		.bar-chart.no-after::after {
-			display: none;
 		}
 	}
 	.region {
